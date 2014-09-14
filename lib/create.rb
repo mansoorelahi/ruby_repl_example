@@ -9,6 +9,7 @@ module MyApp
       values=[]
       # an unix command to get the last line to avoid the id overrrding
       count= `tail -n 1 storage`
+      puts count
       values<<count.split(",").first.to_i+1
       puts "Please Enter your name:"
       name = gets.chomp
@@ -20,8 +21,8 @@ module MyApp
 
     def store_values(val)
       if val.kind_of?(Array)
-           @file.puts(val.join(","))
-           @file.close
+        @file.puts(val.join(","))
+        @file.close
       end
         puts "the information is saved sucessfully"  if @file.closed?
     end

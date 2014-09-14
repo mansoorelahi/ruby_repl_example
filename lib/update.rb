@@ -8,11 +8,13 @@ module MyApp
 
     def update_logic(id)
       update_id = id.delete("^0-9").to_i
-      puts update_id
+      unless update_id ==0
       new_values= updated_values(update_id)
-      puts new_values.join(",")
       update_file_data(new_values)
-    end
+      else
+        puts "Invalid selection"
+      end
+      end
 
     def updated_values(id)
       values=[]
@@ -28,11 +30,8 @@ module MyApp
     def update_file_data(val)
       @file.each do |line|
         if should_be_updated(line,val)
-          puts "I am in "
-          @file.seek(-line.length, IO::SEEK_CUR)
-          # overwrite line with spaces and add a newline char
-          @file.write(' ' * (line.length - 1))
-          @file.write(val.join(","))
+          File.write(f = "storage", File.read(f).gsub(line,val.join(",")))
+          break
         end
       end
       @file.close
