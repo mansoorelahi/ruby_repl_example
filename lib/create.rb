@@ -7,8 +7,9 @@ module MyApp
 
     def values
       values=[]
-      count= @file.readlines.size
-      values<<count+1
+      # an unix command to get the last line to avoid the id overrrding
+      count= `tail -n 1 storage`
+      values<<count.split(",").first.to_i+1
       puts "Please Enter your name:"
       name = gets.chomp
       values<<name

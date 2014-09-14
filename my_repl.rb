@@ -17,7 +17,10 @@ class MyRepl
       when /\Aupdate\z/i
         view= View.new
         view.view_content
-        puts "Enter the ID of data which you wanna update"
+        puts "Type In the ID of record which you would like to update"
+        input = gets.chomp
+        update=Update.new
+        update.update_logic(input)
       when /\Aview\z/i
          view= View.new
          view.view_content
@@ -27,7 +30,7 @@ class MyRepl
       when /\Aexit\z/i
        break
       else
-        puts 'Invalid command'
+        puts 'Invalid command type help to see the supported commands'
     end
   end
 

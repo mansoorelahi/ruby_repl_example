@@ -1,34 +1,25 @@
+require 'fileutils'
+
 module MyApp
 
   class Delete
 
-    def initialize
-      @file = File.open("storage","r+")
-    rescue
-      @file = File.new("storage")
-      @file= File.open("storage","r+")
-    end
-
-
     def delete_file_data(id)
-      @file.each do |line|
-        if should_be_deleted(line,id)
-          # seek back to the beginning of the line.
-          @file.seek(-line.length, IO::SEEK_CUR)
-          # overwrite line with spaces and add a newline char
-          @file.write(' ' * (line.length - 1))
-          @file.write("\n")
+      open('storage', 'r') do |f|
+        open('storage.tmp', 'w') do |f2|
+          f.each_line do |line|
+            f2.write(line) unless should_be_deleted(line,id)
+          end
         end
       end
-      @file.close
+      FileUtils.mv 'storage.tmp', 'storage'
     end
-
 
     def should_be_deleted(line,id)
       l = line.split(",")
       l.first.to_i==id
      rescue
-      false
+      true
     end
 
     def delete_val
