@@ -7,6 +7,7 @@ module MyApp
       unless update_id ==0
       new_values= updated_values(update_id)
       update_file_data(new_values)
+      puts "Successfully Updated"
       else
         puts "Invalid selection"
       end
