@@ -2,10 +2,6 @@ module MyApp
 
   class  Update
 
-    def initialize
-      @file = File.open("storage","r+")
-    end
-
     def update_logic(id)
       update_id = id.delete("^0-9").to_i
       unless update_id ==0
@@ -28,21 +24,26 @@ module MyApp
     end
 
     def update_file_data(val)
-      @file.each do |line|
-        if should_be_updated(line,val)
-          File.write(f = "storage", File.read(f).gsub(line,val.join(",")))
-          break
+        open('storage', 'r') do |f|
+          open('storage.tmp', 'w') do |f2|
+            f.each_line do |line|
+            if should_be_updated(line,val)
+              f2.puts(val.join(","))
+            else
+              f2.puts(line)
+            end
+           end
+          end
         end
-      end
-      @file.close
-      puts "updated successfully"
+        FileUtils.mv 'storage.tmp', 'storage'
     end
 
 
     def should_be_updated(line,val)
       l = line.split(",")
       l.first.to_i==val.first.to_i
-
+    rescue
+      false
     end
 
 
